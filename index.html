@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#09080d">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#09080d" />
   <title>VortexMovies — Movie night starts here</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2309080d'/%3E%3Cpath d='M32 8 7 55h15l10-20 10 20h15z' fill='%239b5cff'/%3E%3Cpath d='m32 28 14 27H18z' fill='%23d4b8ff'/%3E%3C/svg%3E">
 
@@ -18,6 +18,7 @@
       --purple: #a56aff;
       --purple-bright: #c19aff;
       --line: rgba(255,255,255,.1);
+      --shadow: rgba(0,0,0,.45);
     }
 
     * { box-sizing: border-box; }
@@ -28,8 +29,7 @@
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
-        BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     button, input, select { font: inherit; }
@@ -39,7 +39,7 @@
     .topbar {
       position: absolute;
       inset: 0 0 auto;
-      z-index: 10;
+      z-index: 20;
       display: flex;
       align-items: center;
       gap: 24px;
@@ -190,7 +190,7 @@
       position: absolute;
       top: calc(100% + 10px);
       right: 0;
-      z-index: 15;
+      z-index: 40;
       display: grid;
       grid-template-columns: repeat(2, minmax(140px, 1fr));
       gap: 13px;
@@ -448,6 +448,90 @@
 
     .carousel-dot.active { width: 24px; background: var(--purple-bright); }
 
+    .coming-soon-section {
+      padding: 28px 6vw 10px;
+    }
+
+    .coming-soon-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(150px, 250px) minmax(0, 1fr);
+      gap: clamp(18px, 4vw, 36px);
+      max-width: 1000px;
+      overflow: hidden;
+      padding: clamp(16px, 3vw, 28px);
+      border: 1px solid rgba(193,154,255,.28);
+      border-radius: 16px;
+      background:
+        radial-gradient(ellipse at 85% 20%, rgba(165,106,255,.2), transparent 40%),
+        linear-gradient(130deg, #21172e, #121018 72%);
+      box-shadow: 0 16px 42px rgba(0,0,0,.3);
+    }
+
+    .coming-soon-poster {
+      display: block;
+      width: 100%;
+      max-height: 360px;
+      aspect-ratio: 2 / 3;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 10px;
+      background: #211b2b;
+      object-fit: cover;
+      box-shadow: 0 12px 30px rgba(0,0,0,.35);
+    }
+
+    .coming-soon-copy {
+      align-self: center;
+      min-width: 0;
+    }
+
+    .coming-soon-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border: 1px solid rgba(193,154,255,.4);
+      border-radius: 999px;
+      background: rgba(165,106,255,.14);
+      color: #decaff;
+      font-size: .72rem;
+      font-weight: 850;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .coming-soon-label::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--purple-bright);
+      box-shadow: 0 0 12px var(--purple-bright);
+      content: "";
+    }
+
+    .coming-soon-copy h2 {
+      margin: 15px 0 8px;
+      font-size: clamp(1.7rem, 4vw, 2.8rem);
+      letter-spacing: -.045em;
+    }
+
+    .coming-soon-meta {
+      margin: 0;
+      color: #c9c1d2;
+      line-height: 1.6;
+    }
+
+    .coming-soon-note {
+      margin: 15px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.65;
+    }
+
+    .coming-soon-details {
+      margin-top: 20px;
+    }
+
     main { padding: 26px 6vw 70px; }
 
     .continue-section,
@@ -648,7 +732,6 @@
     .genre-shelf { margin: 0 0 30px; }
     .genre-shelf h2 { margin: 0 0 12px; font-size: 1.28rem; }
 
-    /* Fixed card width keeps small genre shelves from stretching cards. */
     .genre-row {
       display: grid;
       grid-auto-columns: clamp(145px, 16vw, 185px);
@@ -970,17 +1053,96 @@
     .similar-card { cursor: pointer; }
     .similar-card:hover { border-color: var(--purple-bright); }
 
+    .search-suggestions {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      z-index: 45;
+      width: 100%;
+      max-height: min(440px, 65vh);
+      overflow-y: auto;
+      padding: 6px;
+      border: 1px solid rgba(193,154,255,.25);
+      border-radius: 12px;
+      background: linear-gradient(145deg, #201a2a, #121018 85%);
+      box-shadow: 0 18px 50px rgba(0,0,0,.62);
+      scrollbar-color: #514466 transparent;
+      scrollbar-width: thin;
+    }
+
+    .search-suggestions[hidden] { display: none; }
+
+    .search-suggestion {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 11px;
+      width: 100%;
+      padding: 8px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .search-suggestion:hover,
+    .search-suggestion.active { background: rgba(165,106,255,.16); }
+
+    .search-suggestion img {
+      width: 42px;
+      height: 58px;
+      border-radius: 5px;
+      background: var(--panel-soft);
+      object-fit: cover;
+    }
+
+    .search-suggestion-copy { min-width: 0; }
+
+    .search-suggestion-title,
+    .search-suggestion-meta {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .search-suggestion-title { font-size: .86rem; font-weight: 750; }
+
+    .search-suggestion-meta {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .74rem;
+    }
+
+    .search-suggestion-badge {
+      padding: 4px 6px;
+      border-radius: 4px;
+      background: rgba(193,154,255,.16);
+      color: var(--purple-bright);
+      font-size: .65rem;
+      font-weight: 800;
+    }
+
+    .search-suggestion-empty {
+      padding: 13px 10px;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
     @media (max-width: 760px) {
       .topbar { flex-wrap: wrap; gap: 12px 16px; padding: 15px 5vw; }
       .nav-links { gap: 12px; font-size: .82rem; }
       .topbar-search { order: 4; flex: 1 0 100%; max-width: none; }
       .profile-menu-name { display: none; }
       .hero { min-height: 540px; padding: 135px 6vw 90px; }
-      main, .continue-section, .personal-home { padding-right: 5vw; padding-left: 5vw; }
+      main, .continue-section, .personal-home, .coming-soon-section { padding-right: 5vw; padding-left: 5vw; }
       .profile-list { grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); }
       .carousel-controls { right: 5vw; bottom: 25px; }
       .details-layout { grid-template-columns: 130px minmax(0, 1fr); gap: 16px; }
       .details-poster { max-height: 210px; }
+      .coming-soon-card { grid-template-columns: 90px 1fr; }
     }
 
     @media (max-width: 520px) {
@@ -1003,6 +1165,8 @@
       .details-layout { grid-template-columns: 1fr; }
       .details-poster { width: 115px; max-height: 170px; }
       .details-copy { padding-right: 0; }
+      .search-suggestion { grid-template-columns: 38px minmax(0,1fr) auto; }
+      .search-suggestion img { width: 38px; height: 52px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1075,8 +1239,10 @@
             <circle cx="11" cy="11" r="7"></circle>
             <path d="m20 20-4-4"></path>
           </svg>
-          <input id="search" type="search" placeholder="Search movies..." autocomplete="off" aria-label="Search movies">
+          <input id="search" type="search" placeholder="Search movies..." autocomplete="off" aria-label="Search movies" role="combobox" aria-autocomplete="list" aria-expanded="false" />
         </label>
+
+        <div class="search-suggestions" id="searchSuggestions" hidden role="listbox" aria-label="Movie search suggestions"></div>
 
         <button class="advanced-search-toggle" id="advancedSearchToggle" type="button" aria-expanded="false" aria-controls="advancedSearchPanel">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
@@ -1152,6 +1318,21 @@
       </div>
     </section>
 
+    <section class="coming-soon-section" id="comingSoonSection" aria-label="Coming soon" hidden>
+      <article class="coming-soon-card">
+        <img class="coming-soon-poster" id="comingSoonPoster" src="" alt="">
+        <div class="coming-soon-copy">
+          <span class="coming-soon-label">Coming Soon</span>
+          <h2 id="comingSoonTitle"></h2>
+          <p class="coming-soon-meta" id="comingSoonMeta"></p>
+          <p class="coming-soon-note">Coming soon to VortexMovies. Check back for updates!</p>
+          <button class="btn secondary coming-soon-details" id="comingSoonDetails" type="button">
+            Movie information
+          </button>
+        </div>
+      </article>
+    </section>
+
     <section class="continue-section" id="continueSection" aria-labelledby="continueTitle" hidden>
       <div class="continue-heading">
         <h2 id="continueTitle">Continue Watching</h2>
@@ -1214,7 +1395,6 @@
         <div class="video-message" id="videoMessage" role="status" hidden></div>
       </div>
       <p class="player-note" id="playerNote" hidden>
-        
         <a id="openDriveLink" href="#" target="_blank" rel="noopener noreferrer"></a>
       </p>
     </div>
@@ -1261,42 +1441,42 @@
     const AVATARS = Array.from({ length: 18 }, (_, i) => `https://i.pravatar.cc/160?img=${i + 1}`);
 
     const movies = [
-  { id:"spider-man-homecoming", title:"Spider-Man: Homecoming", year:2017, genre:"Action", rating:"PG-13", badge:"Featured", poster:"https://image.tmdb.org/t/p/w500/c24sv2weTHPsmDa7jEMN0m2P3RT.jpg", mediaUrl:"https://drive.google.com/file/d/1I9PYrrRLo1m_5Wtfq59L6gHGa3NaUXDv/view" },
-  { id:"spider-man-far-from-home", title:"Spider-Man: Far From Home", year:2019, genre:"Action", rating:"PG-13", badge:"", poster:"https://image.tmdb.org/t/p/w500/4q2NNj4S5dG2RLF9CpXsej7yXl.jpg", mediaUrl:"https://drive.google.com/file/d/1YFUpSLmxb6xIlbdJXScIkRYvwYxvJ_18/view" },
-  { id:"spider-man-no-way-home", title:"Spider-Man: No Way Home", year:2021, genre:"Action", rating:"PG-13", badge:"New", poster:"https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg", mediaUrl:"https://drive.google.com/file/d/1oddQM8w-8UqQIvB-fPpy1h-7xvAbklmA/view" },
-  { id:"inside-out", title:"Inside Out", year:2015, genre:"Animation", rating:"PG", badge:"", poster:"https://image.tmdb.org/t/p/w500/2H1TmgdfNtsKlU9jKdeNyYL5y8T.jpg", mediaUrl:"https://drive.google.com/file/d/1e0OdhlzTKWie6TDXNDOKjKYXbfYfmz6t/view" },
-  { id:"inside-out-2", title:"Inside Out 2", year:2024, genre:"Animation", rating:"PG", badge:"New", poster:"https://image.tmdb.org/t/p/w500/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg", mediaUrl:"https://drive.google.com/file/d/1SABVZNMwHTME4hsFwL9IWyWZPKDTBSoT/view" },
-  { id:"the-lorax", title:"The Lorax", year:2012, genre:"Animation", rating:"PG", badge:"", poster:"https://image.tmdb.org/t/p/w500/tePFnZFw5JvjwjQjaKkqDPNMLPU.jpg", mediaUrl:"https://drive.google.com/file/d/1Kl4ieKALPoEYbllsRy7V8AYiPtJATg7W/view" },
-  { id:"venom", title:"Venom", year:2018, genre:"Action", rating:"PG-13", badge:"", poster:"https://image.tmdb.org/t/p/w500/2uNW4WbgBXL25BAbXGLnLqX71Sw.jpg", mediaUrl:"https://drive.google.com/file/d/1lbDigsHVXpiIT3qokPLcN3VKqDax7rgm/view" },
-  { id:"jurassic-park", title:"Jurassic Park", year:1993, genre:"Adventure", rating:"PG-13", badge:"", poster:"https://cdn.posteritati.com/posters/000/000/072/004/jurassic-park-md-web.jpg", mediaUrl:"https://drive.google.com/file/d/1bB65cEOgbz2Y0ic6nGDZfUQlECXBk2qt/view" },
-  { id:"lost-world-jurassic-park", title:"The Lost World: Jurassic Park", year:1997, genre:"Adventure", rating:"PG-13", badge:"", poster:"https://image.tmdb.org/t/p/w500/jElpCJkSaRPYwIMwZY28gOKV7BK.jpg", mediaUrl:"https://drive.google.com/file/d/15okru5XkkghrsKUfQJaFUTUHxHF_o9a1/view" },
-  { id:"jurassic-park-iii", title:"Jurassic Park III", year:2001, genre:"Adventure", rating:"PG-13", badge:"", poster:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfS_D0MrrY0dqlSOf-k-pubfRxiXGeOOlwN_E0SbZQ48wZSRHTM4qRZHE:https://i.ebayimg.com/images/g/7QAAAOSwAGNn0voY/s-l1200.jpg&s=10", mediaUrl:"https://drive.google.com/file/d/1W9RJS1N_rBcNFAA73Y3B6leLhhjXXY9k/view" },
-  { id:"jurassic-world", title:"Jurassic World", year:2015, genre:"Adventure", rating:"PG-13", badge:"", poster:"https://image.tmdb.org/t/p/w500/rhr4y79GpxQF9IsfJItRXVaoGs4.jpg", mediaUrl:"https://drive.google.com/file/d/1oD0MwA_C9OVb7HeO70m9gAAs-dbm9SJG/view" },
-  { id:"jurassic-world-fallen-kingdom", title:"Jurassic World: Fallen Kingdom", year:2018, genre:"Adventure", rating:"PG-13", badge:"", poster:"https://image.tmdb.org/t/p/w500/c9XxwwhPHdaImA2f1WEfEsbhaFB.jpg", mediaUrl:"https://drive.google.com/file/d/1YgPR4Ulx3eC3VAgnJexxmuaMwKTpAu6-/view" },
-  { id:"jurassic-world-dominion", title:"Jurassic World Dominion", year:2022, genre:"Adventure", rating:"PG-13", badge:"", poster:"https://image.tmdb.org/t/p/w500/kAVRgw7GgK1CfYEJq8ME6EvRIgU.jpg", mediaUrl:"https://drive.google.com/file/d/1x84uwAQzm7-j9MhDdNF5sb_jCRQFhjIa/view" },
-  { id:"the-purge", title:"The Purge", year:2013, genre:"Horror", rating:"R", badge:"", poster:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTI4ETfKk20FokR4OhDLYbU9AvXAmyQnkjAFCY7IaggeY45xkEXcSiSwqdq:https://i.ebayimg.com/00/s/MTYwMFgxMDgw/z/kkkAAOSwtthkoXmK/%24_57.JPG%3Fset_id%3D880000500F&s=10", mediaUrl:"https://drive.google.com/file/d/1PFz-u8_kVFY8Z--NyloACB1DUwiT0oK4/view" },
-  { id:"the-purge-anarchy", title:"The Purge: Anarchy", year:2014, genre:"Horror", rating:"R", badge:"", poster:"https://i.ebayimg.com/images/g/4-wAAOSwvHFm9IGQ/s-l400.jpg", mediaUrl:"https://drive.google.com/file/d/1d7FFXzRf0u7L23AqH-HsUua_kA8a_edQ/view" },
-  { id:"the-purge-election-year", title:"The Purge: Election Year", year:2016, genre:"Horror", rating:"R", badge:"", poster:"https://m.media-amazon.com/images/I/71qd+kIgYeL.jpg", mediaUrl:"https://drive.google.com/file/d/1TmtXANeLZHYqnxcjn5JsiO2LMi6J7H_z/view" },
-  { id:"john-wick", title:"John Wick", year:2014, genre:"Action", rating:"R", badge:"", poster:"https://image.tmdb.org/t/p/w500/fZPSd91yGE9fCcCe6OoQr6E3Bev.jpg", mediaUrl:"https://drive.google.com/file/d/1X9Kflcg0LuRjceV6JghCzs49px8cRTIk/view" },
-  { id:"john-wick-chapter-2", title:"John Wick: Chapter 2", year:2017, genre:"Action", rating:"R", badge:"", poster:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnJVM8RRoycYk-lps42Bo8vnV6SLYO-6LVoDeHqRi1GB6dA0fddu89QGT2:https://m.media-amazon.com/images/M/MV5BMjE2NDkxNTY2M15BMl5BanBnXkFtZTgwMDc2NzE0MTI%40._V1_.jpg&s=10", mediaUrl:"https://drive.google.com/file/d/1gzsZEVTNEb93tSa0nuzlpR2n20D4Dyx9/view" },
-  { id:"john-wick-chapter-3", title:"John Wick: Chapter 3 - Parabellum", year:2019, genre:"Action", rating:"R", badge:"", poster:"https://image.tmdb.org/t/p/w500/ziEuG1essDuWuC5lpWUaw1uXY2O.jpg", mediaUrl:"https://drive.google.com/file/d/1CsIZrKGXn557DdOJrdz5ty7nkg0i4CWR/view" },
-  { id:"mr-peabody-and-sherman", title:"Mr. Peabody & Sherman", year:2014, genre:"Animation", rating:"PG", badge:"New", poster:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXbm6CaE6mjwBoiCxFMJ5eoOqlOUvTjRJjsKLzZDT6nGyD5gN2bFcuL1k&s=10", mediaUrl:"https://drive.google.com/file/d/1u-kPYPj5EqzihQMjeuKEqz_6LgH4rKsr/view" },
-  { id:"joker-2019", title:"Joker", year:2019, genre:"Drama", rating:"R", badge:"New", poster:"https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg", mediaUrl:"https://drive.google.com/file/d/1__wCd7uV9s7qY-o7qZ6F1lO9UQPV7B90/view" },
-  { id:"avatar-2009", title:"Avatar", year:2009, genre:"Sci-Fi", rating:"PG-13", badge:"New", poster:"https://image.tmdb.org/t/p/w500/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg", mediaUrl:"https://drive.google.com/file/d/1TaiaWnOruQUmvlNlyoHEl3EoM4zeV4oe/view" },
-  { id:"good-burger", title:"Good Burger", year:1997, genre:"Comedy", rating:"PG", badge:"New", poster:"https://m.media-amazon.com/images/M/MV5BMjM4NzUxMDczMF5BMl5BanBnXkFtZTgwNDAxMzgwMzE@._V1_.jpg", mediaUrl:"https://drive.google.com/file/d/1vZqAIXXdJqtxt5bFcr821Q8m6B_1GZF_/view" },
-  { id:"pirates-on-stranger-tides", title:"Pirates of the Caribbean: On Stranger Tides", year:2011, genre:"Adventure", rating:"PG-13", badge:"New", poster:"https://image.tmdb.org/t/p/w500/keGfSvCmYj7CvdRx36OdVrAEibE.jpg", mediaUrl:"https://drive.google.com/file/d/1Nc5QxL1XnvFJy6aNQ2s1j_TwtwqWRjoY/view" },
-  { id:"independence-day", title:"Independence Day", year:1996, genre:"Sci-Fi", rating:"PG-13", badge:"New", poster:"https://i.ebayimg.com/images/g/WCAAAOSw7m9a~0uN/s-l1200.jpg", mediaUrl:"https://drive.google.com/file/d/1GEaZcHC96FNeSD78kIxZHiMWcFOIgKmR/view" },
-  { id:"the-wolverine", title:"The Wolverine", year:2013, genre:"Action", rating:"PG-13", badge:"New", poster:"https://m.media-amazon.com/images/I/71PbfaU+SyL._AC_UF894,1000_QL80_.jpg", mediaUrl:"https://drive.google.com/file/d/0BzeqnwcztH5cRERqUGl6TFkyc3M/view?resourcekey=0--S8rnshNZ6cP5uYrkFu3WA" },
-  { id:"elf", title:"Elf", year:2003, genre:"Comedy", rating:"PG", badge:"New", poster:"https://i.ebayimg.com/images/g/5hMAAOSw5CtimQEK/s-l400.jpg", mediaUrl:"https://drive.google.com/file/d/1aus7IcL_iSNmvkKohgiZCjNoCmztRehu/view" },
-  { id:"kung-fu-panda", title:"Kung Fu Panda", year:2008, genre:"Animation", rating:"PG", badge:"New", poster:"https://m.media-amazon.com/images/M/MV5BZDU5MDNiMGItYjVmZi00NDUxLTg2OTktNGE0NzNlNzM4NzgyXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", mediaUrl:"https://drive.google.com/file/d/0B5QJgBuViQvxMExwdFd4LXp1cjQ/view?resourcekey=0--AymX6yocYDSRtZ5jQFm1g" },
-  { id:"the-angry-birds-movie", title:"The Angry Birds Movie", year:2016, genre:"Animation", rating:"PG", badge:"New", poster:"https://i.ebayimg.com/images/g/kDEAAOSwh9hnK42n/s-l1200.jpg", mediaUrl:"https://drive.google.com/file/d/0B4hN7fniyzpwalFxaEl3Tm5nLVU/view?resourcekey=0-ANoY0MoL3TgANh4nqeyZtQ" },
-  { id:"despicable-me", title:"Despicable Me", year:2010, genre:"Animation", rating:"PG", badge:"New", poster:"https://m.media-amazon.com/images/M/MV5BMTY3NjY0MTQ0Nl5BMl5BanBnXkFtZTcwMzQ2MTc0Mw@@._V1_FMjpg_UX1000_.jpg", mediaUrl:"https://drive.google.com/file/d/1O1NlRelSTKmHf75-R2Q1MxN2tDM7qKdj/view" },
-  { id:"despicable-me-2", title:"Despicable Me 2", year:2013, genre:"Animation", rating:"PG", badge:"New", poster:"https://m.media-amazon.com/images/I/51uZ3fsBe3L._AC_UF894,1000_QL80_.jpg", mediaUrl:"https://drive.google.com/file/d/1NkaXEdPuvzKG_LhBzL0cc_pYSxbx2WHY/view" },
-  { id:"despicable-me-3", title:"Despicable Me 3", year:2017, genre:"Animation", rating:"PG", badge:"New", poster:"https://i.ebayimg.com/images/g/S0kAAOSwzwxarD0l/s-l1200.jpg", mediaUrl:"https://drive.google.com/file/d/1wK-_cMu1BN6TOmXr486NqOAmcU_bX_lb/view" },
-  { id:"gullivers-travels", title:"Gulliver's Travels", year:2010, genre:"Comedy", rating:"PG", badge:"New", poster:"https://m.media-amazon.com/images/M/MV5BMjI1NDU1MjcxN15BMl5BanBnXkFtZTcwODczNTM1Mw@@._V1_FMjpg_UX1000_.jpg", mediaUrl:"https://drive.google.com/file/d/0B6lIkxTshK4KTTh0RDlsSzN3Z0U/view?resourcekey=0-XfjX5Cc6t5WQVrVGr2Rrrg" },
-  { id:"dodgeball", title:"Dodgeball", year:2004, genre:"Comedy", rating:"PG-13", badge:"New", poster:"https://i.ebayimg.com/images/g/FcsAAOSwi99l2sbe/s-l1200.jpg", mediaUrl:"https://drive.google.com/file/d/0B8oerU1d9p_ta2lHekdKeDQxekE/view?resourcekey=0-fu98BCeLfAdWKtFRewzNig" },
-  { id:"Spiderman-brand-new-day", title:"Spider-Man: Brand New Day", year:2026, genre:"Action", rating:"PG-13", badge:"Coming soon!", poster:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-_mb13aiXnVo9KCfyNfWJKXzr5i-AF5IyWYSiYuhCC2gZv-Pvs6lT7hpJ&s=10", mediaUrl:""},
-];
+      { id:"spider-man-homecoming", title:"Spider-Man: Homecoming", year:2017, genre:"Action", rating:"PG-13", badge:"Featured", poster:"https://image.tmdb.org/t/p/w500/c24sv2weTHPsmDa7jEMN0m2P3RT.jpg", mediaUrl:"https://drive.google.com/file/d/1I9PYrrRLo1m_5Wtfq59L6gHGa3NaUXDv/view" },
+      { id:"spider-man-far-from-home", title:"Spider-Man: Far From Home", year:2019, genre:"Action", rating:"PG-13", badge:"", poster:"https://image.tmdb.org/t/p/w500/4q2NNj4S5dG2RLF9CpXsej7yXl.jpg", mediaUrl:"https://drive.google.com/file/d/1YFUpSLmxb6xIlbdJXScIkRYvwYxvJ_18/view" },
+      { id:"spider-man-no-way-home", title:"Spider-Man: No Way Home", year:2021, genre:"Action", rating:"PG-13", badge:"New", poster:"https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg", mediaUrl:"https://drive.google.com/file/d/1oddQM8w-8UqQIvB-fPpy1h-7xvAbklmA/view" },
+      { id:"inside-out", title:"Inside Out", year:2015, genre:"Animation", rating:"PG", badge:"", poster:"https://image.tmdb.org/t/p/w500/2H1TmgdfNtsKlU9jKdeNyYL5y8T.jpg", mediaUrl:"https://drive.google.com/file/d/1e0OdhlzTKWie6TDXNDOKjKYXbfYfmz6t/view" },
+      { id:"inside-out-2", title:"Inside Out 2", year:2024, genre:"Animation", rating:"PG", badge:"New", poster:"https://image.tmdb.org/t/p/w500/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg", mediaUrl:"https://drive.google.com/file/d/1SABVZNMwHTME4hsFwL9IWyWZPKDTBSoT/view" },
+      { id:"the-lorax", title:"The Lorax", year:2012, genre:"Animation", rating:"PG", badge:"", poster:"https://image.tmdb.org/t/p/w500/tePFnZFw5JvjwjQjaKkqDPNMLPU.jpg", mediaUrl:"https://drive.google.com/file/d/1Kl4ieKALPoEYbllsRy7V8AYiPtJATg7W/view" },
+      { id:"venom", title:"Venom", year:2018, genre:"Action", rating:"PG-13", badge:"", poster:"https://image.tmdb.org/t/p/w500/2uNW4WbgBXL25BAbXGLnLqX71Sw.jpg", mediaUrl:"https://drive.google.com/file/d/1lbDigsHVXpiIT3qokPLcN3VKqDax7rgm/view" },
+      { id:"jurassic-park", title:"Jurassic Park", year:1993, genre:"Adventure", rating:"PG-13", badge:"", poster:"https://cdn.posteritati.com/posters/000/000/072/004/jurassic-park-md-web.jpg", mediaUrl:"https://drive.google.com/file/d/1bB65cEOgbz2Y0ic6nGDZfUQlECXBk2qt/view" },
+      { id:"lost-world-jurassic-park", title:"The Lost World: Jurassic Park", year:1997, genre:"Adventure", rating:"PG-13", badge:"", poster:"https://image.tmdb.org/t/p/w500/jElpCJkSaRPYwIMwZY28gOKV7BK.jpg", mediaUrl:"https://drive.google.com/file/d/15okru5XkkghrsKUfQJaFUTUHxHF_o9a1/view" },
+      { id:"jurassic-park-iii", title:"Jurassic Park III", year:2001, genre:"Adventure", rating:"PG-13", badge:"", poster:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfS_D0MrrY0dqlSOf-k-pubfRxiXGeOOlwN_E0SbZQ48wZSRHTM4qRZHE:https://i.ebayimg.com/images/g/7QAAAOSwAGNn0voY/s-l1200.jpg&s=10", mediaUrl:"https://drive.google.com/file/d/1W9RJS1N_rBcNFAA73Y3B6leLhhjXXY9k/view" },
+      { id:"jurassic-world", title:"Jurassic World", year:2015, genre:"Adventure", rating:"PG-13", badge:"", poster:"https://image.tmdb.org/t/p/w500/rhr4y79GpxQF9IsfJItRXVaoGs4.jpg", mediaUrl:"https://drive.google.com/file/d/1oD0MwA_C9OVb7HeO70m9gAAs-dbm9SJG/view" },
+      { id:"jurassic-world-fallen-kingdom", title:"Jurassic World: Fallen Kingdom", year:2018, genre:"Adventure", rating:"PG-13", badge:"", poster:"https://image.tmdb.org/t/p/w500/c9XxwwhPHdaImA2f1WEfEsbhaFB.jpg", mediaUrl:"https://drive.google.com/file/d/1YgPR4Ulx3eC3VAgnJexxmuaMwKTpAu6-/view" },
+      { id:"jurassic-world-dominion", title:"Jurassic World Dominion", year:2022, genre:"Adventure", rating:"PG-13", badge:"", poster:"https://image.tmdb.org/t/p/w500/kAVRgw7GgK1CfYEJq8ME6EvRIgU.jpg", mediaUrl:"https://drive.google.com/file/d/1x84uwAQzm7-j9MhDdNF5sb_jCRQFhjIa/view" },
+      { id:"the-purge", title:"The Purge", year:2013, genre:"Horror", rating:"R", badge:"", poster:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTI4ETfKk20FokR4OhDLYbU9AvXAmyQnkjAFCY7IaggeY45xkEXcSiSwqdq:https://i.ebayimg.com/00/s/MTYwMFgxMDgw/z/kkkAAOSwtthkoXmK/%24_57.JPG%3Fset_id%3D880000500F&s=10", mediaUrl:"https://drive.google.com/file/d/1PFz-u8_kVFY8Z--NyloACB1DUwiT0oK4/view" },
+      { id:"the-purge-anarchy", title:"The Purge: Anarchy", year:2014, genre:"Horror", rating:"R", badge:"", poster:"https://i.ebayimg.com/images/g/4-wAAOSwvHFm9IGQ/s-l400.jpg", mediaUrl:"https://drive.google.com/file/d/1d7FFXzRf0u7L23AqH-HsUua_kA8a_edQ/view" },
+      { id:"the-purge-election-year", title:"The Purge: Election Year", year:2016, genre:"Horror", rating:"R", badge:"", poster:"https://m.media-amazon.com/images/I/71qd+kIgYeL.jpg", mediaUrl:"https://drive.google.com/file/d/1TmtXANeLZHYqnxcjn5JsiO2LMi6J7H_z/view" },
+      { id:"john-wick", title:"John Wick", year:2014, genre:"Action", rating:"R", badge:"", poster:"https://image.tmdb.org/t/p/w500/fZPSd91yGE9fCcCe6OoQr6E3Bev.jpg", mediaUrl:"https://drive.google.com/file/d/1X9Kflcg0LuRjceV6JghCzs49px8cRTIk/view" },
+      { id:"john-wick-chapter-2", title:"John Wick: Chapter 2", year:2017, genre:"Action", rating:"R", badge:"", poster:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnJVM8RRoycYk-lps42Bo8vnV6SLYO-6LVoDeHqRi1GB6dA0fddu89QGT2:https://m.media-amazon.com/images/M/MV5BMjE2NDkxNTY2M15BMl5BanBnXkFtZTgwMDc2NzE0MTI%40._V1_.jpg&s=10", mediaUrl:"https://drive.google.com/file/d/1gzsZEVTNEb93tSa0nuzlpR2n20D4Dyx9/view" },
+      { id:"john-wick-chapter-3", title:"John Wick: Chapter 3 - Parabellum", year:2019, genre:"Action", rating:"R", badge:"", poster:"https://image.tmdb.org/t/p/w500/ziEuG1essDuWuC5lpWUaw1uXY2O.jpg", mediaUrl:"https://drive.google.com/file/d/1CsIZrKGXn557DdOJrdz5ty7nkg0i4CWR/view" },
+      { id:"mr-peabody-and-sherman", title:"Mr. Peabody & Sherman", year:2014, genre:"Animation", rating:"PG", badge:"New", poster:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXbm6CaE6mjwBoiCxFMJ5eoOqlOUvTjRJjsKLzZDT6nGyD5gN2bFcuL1k&s=10", mediaUrl:"https://drive.google.com/file/d/1u-kPYPj5EqzihQMjeuKEqz_6LgH4rKsr/view" },
+      { id:"joker-2019", title:"Joker", year:2019, genre:"Drama", rating:"R", badge:"New", poster:"https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg", mediaUrl:"https://drive.google.com/file/d/1__wCd7uV9s7qY-o7qZ6F1lO9UQPV7B90/view" },
+      { id:"avatar-2009", title:"Avatar", year:2009, genre:"Sci-Fi", rating:"PG-13", badge:"New", poster:"https://image.tmdb.org/t/p/w500/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg", mediaUrl:"https://drive.google.com/file/d/1TaiaWnOruQUmvlNlyoHEl3EoM4zeV4oe/view" },
+      { id:"good-burger", title:"Good Burger", year:1997, genre:"Comedy", rating:"PG", badge:"New", poster:"https://m.media-amazon.com/images/M/MV5BMjM4NzUxMDczMF5BMl5BanBnXkFtZTgwNDAxMzgwMzE@._V1_.jpg", mediaUrl:"https://drive.google.com/file/d/1vZqAIXXdJqtxt5bFcr821Q8m6B_1GZF_/view" },
+      { id:"pirates-on-stranger-tides", title:"Pirates of the Caribbean: On Stranger Tides", year:2011, genre:"Adventure", rating:"PG-13", badge:"New", poster:"https://image.tmdb.org/t/p/w500/keGfSvCmYj7CvdRx36OdVrAEibE.jpg", mediaUrl:"https://drive.google.com/file/d/1Nc5QxL1XnvFJy6aNQ2s1j_TwtwqWRjoY/view" },
+      { id:"independence-day", title:"Independence Day", year:1996, genre:"Sci-Fi", rating:"PG-13", badge:"New", poster:"https://i.ebayimg.com/images/g/WCAAAOSw7m9a~0uN/s-l1200.jpg", mediaUrl:"https://drive.google.com/file/d/1GEaZcHC96FNeSD78kIxZHiMWcFOIgKmR/view" },
+      { id:"the-wolverine", title:"The Wolverine", year:2013, genre:"Action", rating:"PG-13", badge:"New", poster:"https://m.media-amazon.com/images/I/71PbfaU+SyL._AC_UF894,1000_QL80_.jpg", mediaUrl:"https://drive.google.com/file/d/0BzeqnwcztH5cRERqUGl6TFkyc3M/view?resourcekey=0--S8rnshNZ6cP5uYrkFu3WA" },
+      { id:"elf", title:"Elf", year:2003, genre:"Comedy", rating:"PG", badge:"New", poster:"https://i.ebayimg.com/images/g/5hMAAOSw5CtimQEK/s-l400.jpg", mediaUrl:"https://drive.google.com/file/d/1aus7IcL_iSNmvkKohgiZCjNoCmztRehu/view" },
+      { id:"kung-fu-panda", title:"Kung Fu Panda", year:2008, genre:"Animation", rating:"PG", badge:"New", poster:"https://m.media-amazon.com/images/M/MV5BZDU5MDNiMGItYjVmZi00NDUxLTg2OTktNGE0NzNlNzM4NzgyXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", mediaUrl:"https://drive.google.com/file/d/0B5QJgBuViQvxMExwdFd4LXp1cjQ/view?resourcekey=0--AymX6yocYDSRtZ5jQFm1g" },
+      { id:"the-angry-birds-movie", title:"The Angry Birds Movie", year:2016, genre:"Animation", rating:"PG", badge:"New", poster:"https://i.ebayimg.com/images/g/kDEAAOSwh9hnK42n/s-l1200.jpg", mediaUrl:"https://drive.google.com/file/d/0B4hN7fniyzpwalFxaEl3Tm5nLVU/view?resourcekey=0-ANoY0MoL3TgANh4nqeyZtQ" },
+      { id:"despicable-me", title:"Despicable Me", year:2010, genre:"Animation", rating:"PG", badge:"New", poster:"https://m.media-amazon.com/images/M/MV5BMTY3NjY0MTQ0Nl5BMl5BanBnXkFtZTcwMzQ2MTc0Mw@@._V1_FMjpg_UX1000_.jpg", mediaUrl:"https://drive.google.com/file/d/1O1NlRelSTKmHf75-R2Q1MxN2tDM7qKdj/view" },
+      { id:"despicable-me-2", title:"Despicable Me 2", year:2013, genre:"Animation", rating:"PG", badge:"New", poster:"https://m.media-amazon.com/images/I/51uZ3fsBe3L._AC_UF894,1000_QL80_.jpg", mediaUrl:"https://drive.google.com/file/d/1NkaXEdPuvzKG_LhBzL0cc_pYSxbx2WHY/view" },
+      { id:"despicable-me-3", title:"Despicable Me 3", year:2017, genre:"Animation", rating:"PG", badge:"New", poster:"https://i.ebayimg.com/images/g/S0kAAOSwzwxarD0l/s-l1200.jpg", mediaUrl:"https://drive.google.com/file/d/1wK-_cMu1BN6TOmXr486NqOAmcU_bX_lb/view" },
+      { id:"gullivers-travels", title:"Gulliver's Travels", year:2010, genre:"Comedy", rating:"PG", badge:"New", poster:"https://m.media-amazon.com/images/M/MV5BMjI1NDU1MjcxN15BMl5BanBnXkFtZTcwODczNTM1Mw@@._V1_FMjpg_UX1000_.jpg", mediaUrl:"https://drive.google.com/file/d/0B6lIkxTshK4KTTh0RDlsSzN3Z0U/view?resourcekey=0-XfjX5Cc6t5WQVrVGr2Rrrg" },
+      { id:"dodgeball", title:"Dodgeball", year:2004, genre:"Comedy", rating:"PG-13", badge:"New", poster:"https://i.ebayimg.com/images/g/FcsAAOSwi99l2sbe/s-l1200.jpg", mediaUrl:"https://drive.google.com/file/d/0B8oerU1d9p_ta2lHekdKeDQxekE/view?resourcekey=0-fu98BCeLfAdWKtFRewzNig" },
+      { id:"Spiderman-brand-new-day", title:"Spider-Man: Brand New Day", year:2026, genre:"Action", rating:"PG-13", badge:"Coming soon!", poster:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-_mb13aiXnVo9KCfyNfWJKXzr5i-AF5IyWYSiYuhCC2gZv-Pvs6lT7hpJ&s=10", mediaUrl:"" }
+    ];
 
     const featuredIds = [
       "spider-man-homecoming",
@@ -1319,6 +1499,7 @@
     const grid = document.getElementById("movieGrid");
     const filters = document.getElementById("filters");
     const search = document.getElementById("search");
+    const searchSuggestions = document.getElementById("searchSuggestions");
     const yearFilter = document.getElementById("yearFilter");
     const typeFilter = document.getElementById("typeFilter");
     const sortFilter = document.getElementById("sortFilter");
@@ -1355,7 +1536,28 @@
     let continueExpiryTimer = null;
     let currentDetailsMovieId = null;
 
+    let currentSuggestions = [];
+    let activeSuggestionIndex = -1;
+
     const featuredMovies = featuredIds.map(id => movies.find(movie => movie.id === id)).filter(Boolean);
+
+    function renderComingSoon() {
+      const movie = movies.find(item => /coming soon/i.test(item.badge || ""));
+      const section = document.getElementById("comingSoonSection");
+      if (!movie) {
+        section.hidden = true;
+        return;
+      }
+
+      section.hidden = false;
+      document.getElementById("comingSoonPoster").src = movie.poster;
+      document.getElementById("comingSoonPoster").alt = `${movie.title} poster`;
+      document.getElementById("comingSoonTitle").textContent = movie.title;
+      document.getElementById("comingSoonMeta").textContent =
+        `${movie.year} · ${movie.genre} · ${movie.rating}`;
+
+      document.getElementById("comingSoonDetails").onclick = () => showMovieDetails(movie);
+    }
 
     [...new Set(movies.map(movie => String(movie.year)))]
       .sort((a, b) => Number(b) - Number(a))
@@ -1419,7 +1621,7 @@
       }[char]));
     }
 
-    function getAllRatings() {
+        function getAllRatings() {
       try { return JSON.parse(localStorage.getItem(RATINGS_KEY) || "{}"); }
       catch { return {}; }
     }
@@ -1443,10 +1645,150 @@
       if (movie) showMovieDetails(movie);
     }
 
+    function isComingSoon(movie) {
+      return /coming soon/i.test(movie?.badge || "");
+    }
+
+    function closeSearchSuggestions() {
+      searchSuggestions.hidden = true;
+      search.setAttribute("aria-expanded", "false");
+      search.removeAttribute("aria-activedescendant");
+      activeSuggestionIndex = -1;
+    }
+
+    function chooseSearchSuggestion(movie) {
+      if (!movie) return;
+
+      closeSearchSuggestions();
+
+      if (isComingSoon(movie)) {
+        showMyList = false;
+        activeGenre = "All";
+        search.value = "";
+        yearFilter.value = "all";
+        typeFilter.value = "all";
+        sortFilter.value = "default";
+        advancedGenreFilter.value = "All";
+        document.getElementById("myListToggle").setAttribute("aria-pressed", "false");
+        document.getElementById("collectionTitle").textContent = "Browse movies";
+        renderFilters();
+        renderMovies();
+        document.getElementById("comingSoonSection").scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+        return;
+      }
+
+      search.value = movie.title;
+      renderMovies();
+
+      const card = [...grid.querySelectorAll(".movie-card")].find(item =>
+        item.querySelector(`[data-play-id="${CSS.escape(movie.id)}"]`)
+      );
+
+      card?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "center"
+      });
+    }
+
+    function renderSearchSuggestions() {
+      const term = search.value.trim().toLowerCase();
+      searchSuggestions.replaceChildren();
+
+      if (!term) {
+        currentSuggestions = [];
+        closeSearchSuggestions();
+        return;
+      }
+
+      currentSuggestions = movies
+        .filter(movie =>
+          `${movie.title} ${movie.genre} ${movie.year} ${movie.rating} ${movie.badge || ""}`
+            .toLowerCase()
+            .includes(term)
+        )
+        .slice(0, 8);
+
+      activeSuggestionIndex = -1;
+
+      if (!currentSuggestions.length) {
+        const empty = document.createElement("div");
+        empty.className = "search-suggestion-empty";
+        empty.textContent = "No matching movies found.";
+        searchSuggestions.appendChild(empty);
+      } else {
+        currentSuggestions.forEach((movie, index) => {
+          const option = document.createElement("button");
+          option.className = "search-suggestion";
+          option.type = "button";
+          option.id = `search-suggestion-${index}`;
+          option.dataset.suggestionIndex = String(index);
+          option.setAttribute("role", "option");
+          option.setAttribute("aria-selected", "false");
+
+          const poster = document.createElement("img");
+          poster.src = movie.poster;
+          poster.alt = "";
+          poster.loading = "lazy";
+          poster.addEventListener("error", () => { poster.hidden = true; });
+
+          const copy = document.createElement("span");
+          copy.className = "search-suggestion-copy";
+
+          const title = document.createElement("span");
+          title.className = "search-suggestion-title";
+          title.textContent = movie.title;
+
+          const meta = document.createElement("span");
+          meta.className = "search-suggestion-meta";
+          meta.textContent = `${movie.year} · ${movie.genre} · ${movie.rating}`;
+
+          copy.append(title, meta);
+          option.append(poster, copy);
+
+          if (movie.badge) {
+            const badge = document.createElement("span");
+            badge.className = "search-suggestion-badge";
+            badge.textContent = movie.badge;
+            option.appendChild(badge);
+          }
+
+          searchSuggestions.appendChild(option);
+        });
+      }
+
+      searchSuggestions.hidden = false;
+      search.setAttribute("aria-expanded", "true");
+      search.setAttribute("aria-controls", searchSuggestions.id);
+    }
+
+    function setActiveSuggestion(index) {
+      const options = [...searchSuggestions.querySelectorAll("[data-suggestion-index]")];
+      if (!options.length) return;
+
+      activeSuggestionIndex = (index + options.length) % options.length;
+
+      options.forEach((option, optionIndex) => {
+        const active = optionIndex === activeSuggestionIndex;
+        option.classList.toggle("active", active);
+        option.setAttribute("aria-selected", String(active));
+      });
+
+      const activeOption = options[activeSuggestionIndex];
+      search.setAttribute("aria-activedescendant", activeOption.id);
+      activeOption.scrollIntoView({ block: "nearest" });
+    }
+
     function pruneContinueWatching(profile, now = Date.now()) {
       if (!profile) return false;
 
-      const previous = Array.isArray(profile.continueWatching) ? profile.continueWatching : [];
+      const previous = Array.isArray(profile.continueWatching)
+        ? profile.continueWatching
+        : [];
+
       profile.continueWatching = previous.filter(item =>
         item &&
         typeof item.movieId === "string" &&
@@ -1470,7 +1812,8 @@
 
       if (pruneContinueWatching(activeProfile)) saveProfiles();
 
-      const entries = [...activeProfile.continueWatching].sort((a, b) => b.openedAt - a.openedAt);
+      const entries = [...activeProfile.continueWatching]
+        .sort((a, b) => b.openedAt - a.openedAt);
 
       if (!entries.length) {
         continueSection.hidden = true;
@@ -1496,7 +1839,9 @@
               data-continue-play="${escapeHTML(movie.id)}"
               aria-label="Continue watching ${escapeHTML(movie.title)}">
               <img src="${escapeHTML(movie.poster)}" alt="" loading="lazy">
-              <span class="continue-play" aria-hidden="true"><span class="continue-play-icon">▶</span></span>
+              <span class="continue-play" aria-hidden="true">
+                <span class="continue-play-icon">▶</span>
+              </span>
             </button>
             <button class="continue-remove" type="button"
               data-continue-remove="${escapeHTML(movie.id)}"
@@ -1513,12 +1858,16 @@
 
     function scheduleContinueExpiry(entries) {
       clearTimeout(continueExpiryTimer);
+
       if (!entries.length) {
         continueExpiryTimer = null;
         return;
       }
 
-      const expiry = Math.min(...entries.map(item => item.openedAt + CONTINUE_WATCHING_TTL));
+      const expiry = Math.min(
+        ...entries.map(item => item.openedAt + CONTINUE_WATCHING_TTL)
+      );
+
       continueExpiryTimer = setTimeout(
         refreshContinueWatching,
         Math.max(0, expiry - Date.now() + 50)
@@ -1526,7 +1875,7 @@
     }
 
     function recordMovieOpened(movie) {
-      if (!activeProfile || !movie) return;
+      if (!activeProfile || !movie || isComingSoon(movie)) return;
 
       const now = Date.now();
       pruneContinueWatching(activeProfile);
@@ -1590,7 +1939,10 @@
 
     function renderProfiles() {
       if (!profiles.length) {
-        profileList.innerHTML = `<div class="no-profiles">No profiles yet. Choose <strong>Add profile</strong> above to create one.</div>`;
+        profileList.innerHTML = `
+          <div class="no-profiles">
+            No profiles yet. Choose <strong>Add profile</strong> above to create one.
+          </div>`;
         return;
       }
 
@@ -1606,6 +1958,7 @@
       showMyList = false;
       activeGenre = "All";
       search.value = "";
+      closeSearchSuggestions();
       activeFeaturedIndex = 0;
       yearFilter.value = "all";
       typeFilter.value = "all";
@@ -1626,6 +1979,7 @@
       renderFilters();
       renderMovies();
       renderFeatured(false);
+      renderComingSoon();
       refreshContinueWatching();
       renderPersonalizedHome();
       startCarousel();
@@ -1636,12 +1990,15 @@
       showMyList = false;
       activeGenre = "All";
       search.value = "";
+      closeSearchSuggestions();
       yearFilter.value = "all";
       typeFilter.value = "all";
       sortFilter.value = "default";
       advancedGenreFilter.value = "All";
+
       document.getElementById("myListToggle").setAttribute("aria-pressed", "false");
       document.getElementById("collectionTitle").textContent = "Browse movies";
+
       renderFilters();
       renderMovies();
     }
@@ -1661,7 +2018,8 @@
 
     function toggleMyList() {
       showMyList = !showMyList;
-      document.getElementById("myListToggle").setAttribute("aria-pressed", String(showMyList));
+      document.getElementById("myListToggle")
+        .setAttribute("aria-pressed", String(showMyList));
       document.getElementById("collectionTitle").textContent =
         showMyList ? "Your List" : "Browse movies";
       renderMovies();
@@ -1669,6 +2027,7 @@
 
     function renderFilters() {
       const genres = ["All", ...new Set(movies.map(movie => movie.genre))];
+
       filters.innerHTML = genres.map(genre => `
         <button class="filter ${genre === activeGenre ? "active" : ""}"
           type="button" data-genre="${escapeHTML(genre)}"
@@ -1685,15 +2044,19 @@
       const ratings = getAllRatings()[activeProfile.id] || {};
 
       let shown = movies.filter(movie => {
+        const regularMovie = !isComingSoon(movie);
         const genreMatch = activeGenre === "All" || movie.genre === activeGenre;
         const searchMatch =
           `${movie.title} ${movie.genre} ${movie.year} ${movie.rating}`
             .toLowerCase()
             .includes(term);
         const listMatch = !showMyList || savedIds.has(movie.id);
-        const yearMatch = yearFilter.value === "all" || String(movie.year) === yearFilter.value;
-        const typeMatch = typeFilter.value === "all" || (movie.type || "Movie") === typeFilter.value;
-        return genreMatch && searchMatch && listMatch && yearMatch && typeMatch;
+        const yearMatch =
+          yearFilter.value === "all" || String(movie.year) === yearFilter.value;
+        const typeMatch =
+          typeFilter.value === "all" || (movie.type || "Movie") === typeFilter.value;
+
+        return regularMovie && genreMatch && searchMatch && listMatch && yearMatch && typeMatch;
       });
 
       if (sortFilter.value === "az") {
@@ -1726,6 +2089,7 @@
           <div class="genre-row">
             ${genreMovies.map(movie => {
               const isSaved = savedIds.has(movie.id);
+
               return `
                 <article class="movie-card">
                   <div class="poster">
@@ -1739,11 +2103,16 @@
                     </button>
                   </div>
                   <div class="movie-info">
-                    <h3 class="movie-title" title="${escapeHTML(movie.title)}">${escapeHTML(movie.title)}</h3>
-                    <div class="movie-meta">${escapeHTML(movie.year)} · ${escapeHTML(movie.genre)} · ${escapeHTML(movie.rating)}</div>
+                    <h3 class="movie-title" title="${escapeHTML(movie.title)}">
+                      ${escapeHTML(movie.title)}
+                    </h3>
+                    <div class="movie-meta">
+                      ${escapeHTML(movie.year)} · ${escapeHTML(movie.genre)} · ${escapeHTML(movie.rating)}
+                    </div>
                     <div class="card-actions">
                       <button class="list-button ${isSaved ? "saved" : ""}"
-                        type="button" data-list-id="${escapeHTML(movie.id)}" aria-pressed="${isSaved}">
+                        type="button" data-list-id="${escapeHTML(movie.id)}"
+                        aria-pressed="${isSaved}">
                         ${isSaved ? "✓ Added to Your List" : "+ Add to Your List"}
                       </button>
                       <button class="movie-card-details" type="button"
@@ -1759,6 +2128,7 @@
     function updateFeaturedListButton(movie) {
       const button = document.getElementById("featuredListButton");
       const saved = Boolean(activeProfile?.movieIds.includes(movie.id));
+
       button.textContent = saved ? "✓ Added to Your List" : "＋ Add to Your List";
       button.classList.toggle("saved", saved);
       button.setAttribute("aria-pressed", String(saved));
@@ -1771,6 +2141,7 @@
         `Discover ${movie.title} in your collection. Select the banner or Play featured to watch.`;
       document.getElementById("heroMeta").textContent =
         `${movie.year} · ${movie.genre} · ${movie.rating}`;
+
       updateFeaturedListButton(movie);
 
       document.getElementById("heroPlayArea").setAttribute(
@@ -1788,6 +2159,7 @@
 
     function renderFeatured(animate = true) {
       if (!featuredMovies.length) return;
+
       const movie = featuredMovies[activeFeaturedIndex];
 
       if (!animate || !heroImageCurrent.style.backgroundImage) {
@@ -1848,19 +2220,35 @@
 
     function moveCarousel(direction) {
       if (featuredMovies.length < 2) return;
-      activeFeaturedIndex = (activeFeaturedIndex + direction + featuredMovies.length) % featuredMovies.length;
+
+      activeFeaturedIndex =
+        (activeFeaturedIndex + direction + featuredMovies.length) % featuredMovies.length;
+
       renderFeatured(true);
       startCarousel();
     }
 
-    function getDriveFileId(url) {
+    function getDriveDetails(url) {
       try {
         const parsed = new URL(url);
-        if (parsed.hostname !== "drive.google.com" && !parsed.hostname.endsWith(".drive.google.com")) return "";
-        return parsed.pathname.match(/\/file\/d\/([^/]+)/)?.[1] ||
-          parsed.searchParams.get("id") || "";
+        if (
+          parsed.hostname !== "drive.google.com" &&
+          !parsed.hostname.endsWith(".drive.google.com")
+        ) return null;
+
+        const id =
+          parsed.pathname.match(/\/file\/d\/([^/]+)/)?.[1] ||
+          parsed.searchParams.get("id") ||
+          "";
+
+        if (!id) return null;
+
+        return {
+          id,
+          resourcekey: parsed.searchParams.get("resourcekey") || ""
+        };
       } catch {
-        return "";
+        return null;
       }
     }
 
@@ -1872,12 +2260,19 @@
       drivePlayer.removeAttribute("src");
       drivePlayer.hidden = true;
       videoMessage.hidden = true;
-      playerNote.hidden = true;
-      openDriveLink.removeAttribute("href");
+      videoMessage.textContent = "";
     }
 
     function openMovie(movie) {
       if (!movie) return;
+
+      if (isComingSoon(movie)) {
+        document.getElementById("comingSoonSection").scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+        return;
+      }
 
       closeMovieDetails();
       stopCarousel();
@@ -1887,13 +2282,19 @@
       document.body.style.overflow = "hidden";
       resetPlayer();
 
-      const driveId = getDriveFileId(movie.mediaUrl);
-      if (driveId) {
-        const safeId = encodeURIComponent(driveId);
-        drivePlayer.src = `https://drive.google.com/file/d/${safeId}/preview`;
+      const drive = getDriveDetails(movie.mediaUrl);
+
+      if (drive) {
+        const previewUrl = new URL(
+          `https://drive.google.com/file/d/${encodeURIComponent(drive.id)}/preview`
+        );
+
+        if (drive.resourcekey) {
+          previewUrl.searchParams.set("resourcekey", drive.resourcekey);
+        }
+
+        drivePlayer.src = previewUrl.href;
         drivePlayer.hidden = false;
-        playerNote.hidden = false;
-        openDriveLink.href = `https://drive.google.com/file/d/${safeId}/view`;
         return;
       }
 
@@ -1918,11 +2319,13 @@
       document.body.style.overflow = "";
       resetPlayer();
 
-      if (activeProfile && profileGate.hidden && detailsModal.hidden) startCarousel();
+      if (activeProfile && profileGate.hidden && detailsModal.hidden) {
+        startCarousel();
+      }
     }
 
     function toggleMovieInList(movie) {
-      if (!activeProfile || !movie) return;
+      if (!activeProfile || !movie || isComingSoon(movie)) return;
 
       const ids = new Set(activeProfile.movieIds);
       if (ids.has(movie.id)) ids.delete(movie.id);
@@ -1941,8 +2344,11 @@
       const card = document.createElement("article");
       card.className = "personal-card";
       card.innerHTML = `
-        <img src="${escapeHTML(movie.poster)}" alt="${escapeHTML(movie.title)} poster" loading="lazy">
-        <span class="personal-card-title" title="${escapeHTML(movie.title)}">${escapeHTML(movie.title)}</span>
+        <img src="${escapeHTML(movie.poster)}"
+          alt="${escapeHTML(movie.title)} poster" loading="lazy">
+        <span class="personal-card-title" title="${escapeHTML(movie.title)}">
+          ${escapeHTML(movie.title)}
+        </span>
         <div class="personal-card-actions">
           <button type="button" data-personal-play="${escapeHTML(movie.id)}">▶ Play</button>
           <button type="button" data-personal-details="${escapeHTML(movie.id)}">Details</button>
@@ -1966,8 +2372,11 @@
           Number.isFinite(item.watchedAt)
         )
         .sort((a, b) => b.watchedAt - a.watchedAt)
-        .map(item => ({ item, movie: movies.find(movie => movie.id === item.movieId) }))
-        .filter(row => row.movie);
+        .map(item => ({
+          item,
+          movie: movies.find(movie => movie.id === item.movieId)
+        }))
+        .filter(row => row.movie && !isComingSoon(row.movie));
 
       recentlyWatchedBlock.hidden = history.length === 0;
       recentlyWatchedRow.replaceChildren(
@@ -1984,7 +2393,7 @@
       const profileRatings = getAllRatings()[activeProfile.id] || {};
       Object.entries(profileRatings).forEach(([id, value]) => {
         const movie = movies.find(item => item.id === id);
-        if (movie && Number(value) >= 4) {
+        if (movie && !isComingSoon(movie) && Number(value) >= 4) {
           genreCounts.set(movie.genre, (genreCounts.get(movie.genre) || 0) + 1);
         }
       });
@@ -2017,12 +2426,12 @@
       const recommendationsBlock = document.getElementById("recommendationsBlock");
       const recommendationsRow = document.getElementById("recommendationsRow");
 
-      if (history.length === 0) {
+      if (!history.length) {
         recommendationsBlock.hidden = true;
         recommendationsRow.replaceChildren();
       } else {
         const recommendations = movies
-          .filter(movie => !watchedIds.has(movie.id))
+          .filter(movie => !isComingSoon(movie) && !watchedIds.has(movie.id))
           .sort((a, b) => {
             const genreScore =
               (genreCounts.get(b.genre) || 0) - (genreCounts.get(a.genre) || 0);
@@ -2044,7 +2453,11 @@
       if (history.length) {
         const latestMovie = history[0].movie;
         const similarMovies = movies
-          .filter(movie => movie.id !== latestMovie.id && movie.genre === latestMovie.genre)
+          .filter(movie =>
+            !isComingSoon(movie) &&
+            movie.id !== latestMovie.id &&
+            movie.genre === latestMovie.genre
+          )
           .slice(0, 8);
 
         document.getElementById("becauseTitle").textContent =
@@ -2068,14 +2481,18 @@
       document.getElementById("detailsMeta").textContent =
         `${movie.year} · ${movie.type || "Movie"} · ${movie.rating || "Rating not listed"}`;
       document.getElementById("detailsDescription").textContent =
-        movie.description || "A description has not been added for this movie yet.";
+        movie.description || (isComingSoon(movie)
+          ? "This title is coming soon. Check back for updates."
+          : "A description has not been added for this movie yet.");
       document.getElementById("detailsGenre").textContent = movie.genre || "Not listed";
       document.getElementById("detailsRuntime").textContent = movie.runtime || "Not added yet";
       document.getElementById("detailsDirector").textContent = movie.director || "Not added yet";
       document.getElementById("detailsCast").textContent = movie.cast || "Not added yet";
 
       document.getElementById("detailsTrailer").href =
-        `https://www.youtube.com/results?search_query=${encodeURIComponent(`${movie.title} ${movie.year} official trailer`)}`;
+        `https://www.youtube.com/results?search_query=${encodeURIComponent(
+          `${movie.title} ${movie.year} official trailer`
+        )}`;
 
       const rating = getRating(movie.id);
       document.getElementById("ratingStars").innerHTML = [1, 2, 3, 4, 5].map(value => `
@@ -2087,7 +2504,11 @@
         rating ? `Your rating: ${rating} / 5` : "Not rated yet";
 
       const similar = movies
-        .filter(item => item.id !== movie.id && item.genre === movie.genre)
+        .filter(item =>
+          !isComingSoon(item) &&
+          item.id !== movie.id &&
+          item.genre === movie.genre
+        )
         .slice(0, 6);
 
       const similarSection = document.getElementById("similarSection");
@@ -2095,7 +2516,8 @@
       similarSection.hidden = similar.length === 0;
       similarRow.innerHTML = similar.map(item => `
         <button class="similar-card" type="button" data-similar-id="${escapeHTML(item.id)}">
-          <img src="${escapeHTML(item.poster)}" alt="${escapeHTML(item.title)} poster" loading="lazy">
+          <img src="${escapeHTML(item.poster)}"
+            alt="${escapeHTML(item.title)} poster" loading="lazy">
           <span class="similar-card-title">${escapeHTML(item.title)}</span>
         </button>`).join("");
 
@@ -2107,6 +2529,7 @@
     function closeMovieDetails() {
       detailsModal.hidden = true;
       document.body.style.overflow = "";
+
       if (activeProfile && profileGate.hidden && !modal.classList.contains("open")) {
         startCarousel();
       }
@@ -2139,6 +2562,7 @@
 
     profileForm.addEventListener("submit", event => {
       event.preventDefault();
+
       const name = profileNameInput.value.trim();
       if (!name) {
         profileNameInput.focus();
@@ -2181,6 +2605,52 @@
         advancedSearchPanel.hidden = true;
         advancedSearchToggle.setAttribute("aria-expanded", "false");
       }
+
+      if (!event.target.closest(".topbar-search")) {
+        closeSearchSuggestions();
+      }
+    });
+
+    search.addEventListener("input", () => {
+      renderMovies();
+      renderSearchSuggestions();
+    });
+
+    search.addEventListener("focus", renderSearchSuggestions);
+
+    search.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closeSearchSuggestions();
+        return;
+      }
+
+      if (searchSuggestions.hidden || !currentSuggestions.length) return;
+
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        setActiveSuggestion(activeSuggestionIndex + 1);
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        setActiveSuggestion(
+          activeSuggestionIndex < 0
+            ? currentSuggestions.length - 1
+            : activeSuggestionIndex - 1
+        );
+      } else if (event.key === "Enter") {
+        event.preventDefault();
+        chooseSearchSuggestion(
+          currentSuggestions[activeSuggestionIndex < 0 ? 0 : activeSuggestionIndex]
+        );
+      }
+    });
+
+    searchSuggestions.addEventListener("click", event => {
+      const option = event.target.closest("[data-suggestion-index]");
+      if (!option) return;
+
+      chooseSearchSuggestion(
+        currentSuggestions[Number(option.dataset.suggestionIndex)]
+      );
     });
 
     document.getElementById("featuredPlay").addEventListener("click", () => {
@@ -2201,6 +2671,7 @@
     document.getElementById("carouselDots").addEventListener("click", event => {
       const dot = event.target.closest("[data-slide]");
       if (!dot) return;
+
       activeFeaturedIndex = Number(dot.dataset.slide);
       renderFeatured(true);
       startCarousel();
@@ -2216,6 +2687,7 @@
     filters.addEventListener("click", event => {
       const button = event.target.closest("[data-genre]");
       if (!button) return;
+
       activeGenre = button.dataset.genre;
       advancedGenreFilter.value = activeGenre;
       renderFilters();
@@ -2228,7 +2700,6 @@
       renderMovies();
     });
 
-    search.addEventListener("input", renderMovies);
     [yearFilter, typeFilter, sortFilter].forEach(select =>
       select.addEventListener("change", renderMovies)
     );
@@ -2362,6 +2833,7 @@
 
     renderProfiles();
     renderAvatarChoices();
+    renderComingSoon();
   </script>
 </body>
 </html>
