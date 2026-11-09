@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#09080d" />
   <title>VortexMovies — Movie night starts here</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2309080d'/%3E%3Cpath d='M32 8 7 55h15l10-20 10 20h15z' fill='%239b5cff'/%3E%3Cpath d='m32 28 14 27H18z' fill='%23d4b8ff'/%3E%3C/svg%3E">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3CradialGradient id='bg' cx='50%25' cy='45%25' r='70%25'%3E%3Cstop stop-color='%23251a35'/%3E%3Cstop offset='1' stop-color='%2309080d'/%3E%3C/radialGradient%3E%3ClinearGradient id='swirl' x1='12' y1='12' x2='52' y2='52'%3E%3Cstop stop-color='%23e0c9ff'/%3E%3Cstop offset='.48' stop-color='%23a56aff'/%3E%3Cstop offset='1' stop-color='%237541c7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23bg)'/%3E%3Ccircle cx='32' cy='32' r='25' fill='none' stroke='%23a56aff' stroke-opacity='.2'/%3E%3Cpath d='M48 22C43 12 27 11 19 19S12 41 22 47s23 2 25-8-8-17-16-13-7 13 0 14 10-6 5-9' fill='none' stroke='url(%23swirl)' stroke-width='4.5' stroke-linecap='round'/%3E%3Ccircle cx='36' cy='31' r='2.5' fill='%23f5f2fa'/%3E%3Ccircle cx='15' cy='20' r='1.3' fill='%23e0c9ff'/%3E%3Ccircle cx='49' cy='45' r='1.2' fill='%23c19aff'/%3E%3C/svg%3E">
 
   <style>
     :root {
@@ -61,13 +62,25 @@
 
     .brand-mark {
       display: grid;
-      width: 31px;
-      height: 31px;
+      flex: 0 0 auto;
+      width: 34px;
+      height: 34px;
       place-items: center;
+      overflow: hidden;
+      border: 1px solid rgba(75, 231, 255, .55);
       border-radius: 9px;
-      background: linear-gradient(135deg, #c19aff, #7541c7);
-      color: #100a18;
-      box-shadow: 0 0 22px rgba(165,106,255,.28);
+      background:
+        radial-gradient(circle at 50% 50%, rgba(128, 68, 255, .22), transparent 58%),
+        linear-gradient(145deg, #111a27, #100c19);
+      box-shadow:
+        0 0 10px rgba(48, 220, 255, .18),
+        inset 0 0 10px rgba(165, 106, 255, .12);
+    }
+
+    .brand-mark svg {
+      display: block;
+      width: 27px;
+      height: 27px;
     }
 
     .nav-links {
@@ -985,6 +998,35 @@
     }
 
     .icon-btn:hover { border-color: var(--purple); color: var(--purple-bright); }
+
+    .episode-nav-btn {
+  display: inline-flex;
+  width: auto;
+  min-width: 108px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 12px;
+  border-color: rgba(193,154,255,.35);
+  background: linear-gradient(145deg, rgba(165,106,255,.16), rgba(120,74,175,.12));
+  color: #e8dcfa;
+  font-size: .82rem;
+  font-weight: 700;
+}
+
+.episode-nav-btn:hover:not(:disabled) {
+  border-color: var(--purple-bright);
+  background: rgba(165,106,255,.28);
+  color: white;
+}
+
+.episode-nav-btn:disabled {
+  cursor: not-allowed;
+  opacity: .42;
+}
+
+
     .video-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid rgba(255,255,255,.08); border-radius: 9px; background: #000; }
     .video-frame video, .video-frame iframe { display: block; width: 100%; height: 100%; border: 0; background: #000; }
     .video-frame video { object-fit: contain; }
@@ -1177,6 +1219,196 @@
         animation-iteration-count: 1 !important;
       }
     }
+    .series-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+  padding: 20px;
+  background: rgba(0, 0, 0, .88);
+  backdrop-filter: blur(7px);
+}
+
+.series-modal[hidden] {
+  display: none;
+}
+
+.series-panel {
+  position: relative;
+  width: min(850px, 100%);
+  max-height: min(850px, 90vh);
+  overflow-y: auto;
+  padding: clamp(20px, 4vw, 34px);
+  border: 1px solid rgba(193, 154, 255, .28);
+  border-radius: 16px;
+  background: linear-gradient(145deg, #201a2a, #111018);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, .55);
+}
+
+.series-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(10, 8, 14, .8);
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.series-close:hover {
+  border-color: var(--purple-bright);
+  color: var(--purple-bright);
+}
+
+.series-heading {
+  display: grid;
+  grid-template-columns: minmax(110px, 185px) minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+  padding-right: 35px;
+}
+
+.series-poster {
+  display: block;
+  width: 100%;
+  max-height: 270px;
+  aspect-ratio: 2 / 3;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--panel-soft);
+  object-fit: cover;
+}
+
+.series-heading h2 {
+  margin: 10px 0;
+  font-size: clamp(1.7rem, 5vw, 2.6rem);
+  letter-spacing: -.04em;
+}
+
+.series-meta {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.series-season-label {
+  display: grid;
+  gap: 7px;
+  max-width: 260px;
+  margin-top: 20px;
+  color: #d7cde4;
+  font-size: .85rem;
+  font-weight: 700;
+}
+
+#seriesSeasonSelect {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  outline: none;
+  background: #100e15;
+  color: var(--text);
+}
+
+#seriesSeasonSelect:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(165, 106, 255, .13);
+}
+
+.series-episodes-heading {
+  margin: 28px 0 12px;
+  font-size: 1.1rem;
+}
+
+.series-episode-list {
+  display: grid;
+  gap: 9px;
+}
+
+.series-episode {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .025);
+}
+
+.series-episode-copy {
+  min-width: 0;
+}
+
+.series-episode-title {
+  display: block;
+  overflow: hidden;
+  font-weight: 750;
+  text-overflow: ellipsis;
+}
+
+.series-episode-number {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.series-episode-play {
+  flex: 0 0 auto;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid rgba(193, 154, 255, .42);
+  border-radius: 6px;
+  background: rgba(165, 106, 255, .12);
+  color: #e6d5ff;
+  cursor: pointer;
+}
+
+.series-episode-play:hover:not(:disabled) {
+  border-color: var(--purple-bright);
+  background: rgba(165, 106, 255, .24);
+}
+
+.series-episode-play:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+@media (max-width: 520px) {
+  .series-modal {
+    padding: 10px;
+  }
+
+  .series-panel {
+    padding: 20px 14px;
+  }
+
+  .series-heading {
+    grid-template-columns: 90px minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .series-poster {
+    max-height: 150px;
+  }
+
+  .series-episode {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
   </style>
 </head>
 
@@ -1185,7 +1417,21 @@
     <div class="profile-panel">
       <div class="profile-panel-content">
         <a class="brand gate-brand" href="#" aria-label="VortexMovies">
-          <span class="brand-mark" aria-hidden="true">▶</span>
+
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 2.8 27.4 9.4v13.2L16 29.2 4.6 22.6V9.4L16 2.8Z"
+                stroke="#45E8FF" stroke-width="1.25" opacity=".9"/>
+              <path d="M21.8 10.2a8.1 8.1 0 1 0 1.4 8.2c.8-2.7-1-5.3-3.7-5.4-2.1-.1-3.7 1.5-3.5 3.4.1 1.3 1.3 2.1 2.5 1.7"
+                stroke="#C19AFF" stroke-width="2" stroke-linecap="round"/>
+              <path d="M7.5 11.2h3M21.5 21h3M11 25l1.5-2.2"
+                stroke="#45E8FF" stroke-width="1.2" stroke-linecap="round"/>
+              <circle cx="16" cy="16" r="1.35" fill="#E8FBFF"/>
+              <circle cx="16" cy="16" r="3.1" stroke="#45E8FF" stroke-opacity=".48"/>
+            </svg>
+          </span>
+
+
           VortexMovies
         </a>
         <h1 class="gate-heading" id="gateTitle">Who's watching?</h1>
@@ -1223,7 +1469,18 @@
   <div id="app" hidden>
     <header class="topbar">
       <a class="brand" href="#home" aria-label="VortexMovies home">
-        <span class="brand-mark" aria-hidden="true">▶</span>
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 2.8 27.4 9.4v13.2L16 29.2 4.6 22.6V9.4L16 2.8Z"
+              stroke="#45E8FF" stroke-width="1.25" opacity=".9"/>
+            <path d="M21.8 10.2a8.1 8.1 0 1 0 1.4 8.2c.8-2.7-1-5.3-3.7-5.4-2.1-.1-3.7 1.5-3.5 3.4.1 1.3 1.3 2.1 2.5 1.7"
+              stroke="#C19AFF" stroke-width="2" stroke-linecap="round"/>
+            <path d="M7.5 11.2h3M21.5 21h3M11 25l1.5-2.2"
+              stroke="#45E8FF" stroke-width="1.2" stroke-linecap="round"/>
+            <circle cx="16" cy="16" r="1.35" fill="#E8FBFF"/>
+            <circle cx="16" cy="16" r="3.1" stroke="#45E8FF" stroke-opacity=".48"/>
+          </svg>
+        </span>
         VortexMovies
       </a>
 
@@ -1231,6 +1488,7 @@
         <a href="#home">Home</a>
         <a href="#movies">Movies</a>
         <button id="myListToggle" type="button" aria-pressed="false">Your List</button>
+        <button id="tvShowsNav" type="button">TV Shows</button>
       </nav>
 
       <div class="topbar-search">
@@ -1385,6 +1643,14 @@
       <div class="player-top">
         <h2 id="playerTitle">Now playing</h2>
         <div class="player-controls">
+          <button class="icon-btn episode-nav-btn" id="previousEpisodeBtn" type="button"
+            aria-label="Previous episode" title="Previous episode" hidden>
+            <span aria-hidden="true">←</span><span>Previous</span>
+          </button>
+          <button class="icon-btn episode-nav-btn" id="nextEpisodeBtn" type="button"
+            aria-label="Next episode" title="Next episode" hidden>
+            <span>Next</span><span aria-hidden="true">→</span>
+          </button>
           <button class="icon-btn" id="fullscreenBtn" type="button" aria-label="Enter fullscreen" title="Fullscreen">⛶</button>
           <button class="icon-btn" id="closeBtn" type="button" aria-label="Close player" title="Close">✕</button>
         </div>
@@ -1434,6 +1700,31 @@
     </article>
   </div>
 
+
+  <div class="series-modal" id="seriesModal" hidden>
+  <section class="series-panel" role="dialog" aria-modal="true" aria-labelledby="seriesTitle">
+    <button class="series-close" id="closeSeriesBtn" type="button" aria-label="Close show episodes">×</button>
+
+    <div class="series-heading">
+      <img id="seriesPoster" class="series-poster" src="" alt="" />
+      <div>
+        <span class="eyebrow">TV series</span>
+        <h2 id="seriesTitle"></h2>
+        <p id="seriesMeta" class="series-meta"></p>
+
+        <label class="series-season-label" for="seriesSeasonSelect">Season</label>
+        <select id="seriesSeasonSelect"></select>
+      </div>
+    </div>
+
+    <h3 class="series-episodes-heading">Episodes</h3>
+    <div id="seriesEpisodeList" class="series-episode-list"></div>
+  </section>
+</div>
+
+
+
+
   <script>
     const STORAGE_KEY = "vortexMoviesProfiles_v1";
     const RATINGS_KEY = "vortexMoviesRatings_v1";
@@ -1475,9 +1766,8 @@
       { id:"despicable-me-3", title:"Despicable Me 3", year:2017, genre:"Animation", rating:"PG", badge:"", poster:"https://i.ebayimg.com/images/g/S0kAAOSwzwxarD0l/s-l1200.jpg", mediaUrl:"https://drive.google.com/file/d/1wK-_cMu1BN6TOmXr486NqOAmcU_bX_lb/view" },
       { id:"gullivers-travels", title:"Gulliver's Travels", year:2010, genre:"Comedy", rating:"PG", badge:"", poster:"https://m.media-amazon.com/images/M/MV5BMjI1NDU1MjcxN15BMl5BanBnXkFtZTcwODczNTM1Mw@@._V1_FMjpg_UX1000_.jpg", mediaUrl:"https://drive.google.com/file/d/0B6lIkxTshK4KTTh0RDlsSzN3Z0U/view?resourcekey=0-XfjX5Cc6t5WQVrVGr2Rrrg" },
       { id:"dodgeball", title:"Dodgeball", year:2004, genre:"Comedy", rating:"PG-13", badge:"", poster:"https://i.ebayimg.com/images/g/FcsAAOSwi99l2sbe/s-l1200.jpg", mediaUrl:"https://drive.google.com/file/d/0B8oerU1d9p_ta2lHekdKeDQxekE/view?resourcekey=0-fu98BCeLfAdWKtFRewzNig" },
-      
+      { id:"50firstdates", title:"50 First Dates", year:2004, genre:"Comedy", rating:"PG-13", badge:"", poster:"https://www.originalfilmart.com/cdn/shop/products/50FirstDates_2004_original_film_art_97287c44-3a49-40fa-aa70-2eb4da5c66e0_5000x.jpg?v=1655320593", mediaUrl:"https://drive.google.com/file/d/1xMRKpiF0lxqeHjTX_cESVohdsV8mnwgQ/view?t=8.551" },
       { id:"Spiderman-brand-new-day", title:"Spider-Man: Brand New Day", year:2026, genre:"Action", rating:"PG-13", badge:"New", poster:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-_mb13aiXnVo9KCfyNfWJKXzr5i-AF5IyWYSiYuhCC2gZv-Pvs6lT7hpJ&s=10", mediaUrl:"https://drive.google.com/file/d/1xS-Bx_5Bm3_PCdRbQtJdU3xoiPINNBgA/view?t=6.66" },
-
       { id:"Harry-Potter1", title:"Harry Potter and the Philosopher's Stone", year:2001, genre:"Adventure", rating:"PG-13", badge:"", poster:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnD5G1vm8r_z-m9gGQy1G_Og6em7CarIqoYeNEnzIOTebYoIBYL-UXKEM&s=10", mediaUrl:"https://drive.google.com/file/d/1xAQ3O7e9bbZ9NFPMHyyOqQZO_eHk39Pe/view?t=8.69" },
       { id:"Harry-Potter2", title:"Harry Potter and the Chamber of Secrets", year:2002, genre:"Adventure", rating:"PG-13", badge:"", poster:"https://i.ebayimg.com/00/s/MTIyNVg4MzA=/z/PDQAAOSw~gRV3MYT/$_57.JPG?set_id=880000500F", mediaUrl:"https://drive.google.com/file/d/1yVRoq_tpbLmfa4W-6GdYtRF1vs4lz3XS/view?t=8.081" },
       { id:"Harry-Potter3", title:"Harry Potter and the Prisoner of Azkaban ", year:2004, genre:"Adventure", rating:"PG-13", badge:"", poster:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQkK8rY2MINPlCpVKaRWpH2VWnOX5BBj04GFvtpwBlgA&s", mediaUrl:"https://drive.google.com/file/d/1dsaGR3fqJ6Y1rtz3kSsGVCe8N3bANriY/view?t=11.654" },
@@ -1488,11 +1778,34 @@
       
 
       //This section is reserved for show's and seasons
-      //This section is reserved for show's and seasons
+{
+  id: "Death-note",
+  title: "Death Note",
+  year: 2003,
+  genre: "Anime",
+  rating: "PG-13",
+  badge: "Series",
+  type: "TV",
+  poster: "https://m.media-amazon.com/images/I/716ASj7z2GL._AC_UF894,1000_QL80_.jpg",
+  seasons: [
+    {
+      number: 1,
+      title: "Season 1",
+      episodes: [
+        { number: 1, title: "Ep.1", mediaUrl: "https://drive.google.com/file/d/1oyzYFJ_Qg3KdgF9JGtT6MW5un1NrqFKs/view" },
+        { number: 2, title: "Ep.2", mediaUrl: "https://drive.google.com/file/d/1aMth4idCXY7LtQYwSyWz-wsi_xBh20pT/view" },
+        { number: 3, title: "Ep.3", mediaUrl: "https://drive.google.com/file/d/1TJXF-h_TCm_3R_5pCjhzu_Jg50fHk4tZ/view" },
+        { number: 4, title: "Ep.4", mediaUrl: "https://drive.google.com/file/d/18aZmqT3CknI6beljG7MG5UUtKxS9WxYk/view?t=2.294" },
+        { number: 5, title: "Ep.5", mediaUrl: "https://drive.google.com/file/d/14c9-dYX3ebritwv2mbSfG4nzpwoIY5_n/view?t=3.969" },
+        { number: 6, title: "Ep.6", mediaUrl: "https://drive.google.com/file/d/1FdsRN8kABDg1qLxgC2qpmn2OjiGRW-vS/view?t=3.961" },
+        { number: 7, title: "Ep.7", mediaUrl: "https://drive.google.com/file/d/1_cgItf7tKrMfSIs_r1948CQzSne2FcO3/view?usp=drive_open&t=2.081" },
+        
 
-      { id:"Death-note", title:"Death Note", year:2003, genre:"Anime", rating:"PG-13", badge:"Coming soon!", poster:"https://m.media-amazon.com/images/I/716ASj7z2GL._AC_UF894,1000_QL80_.jpg", mediaUrl:"" }
-
-      //End of section reserved for show's and seasons
+      ]
+    }
+  ]
+}      
+//End of section reserved for show's and seasons
     ];
 
     const featuredIds = [
@@ -2053,6 +2366,145 @@
         </button>`).join("");
     }
 
+
+    let activeSeriesMovie = null;
+
+function renderSeriesEpisodes() {
+  const modal = document.getElementById("seriesModal");
+  const seasonSelect = document.getElementById("seriesSeasonSelect");
+  const list = document.getElementById("seriesEpisodeList");
+
+  if (!modal || !seasonSelect || !list || !activeSeriesMovie) return;
+
+  const seasonIndex = Number(seasonSelect.value);
+  const season = activeSeriesMovie.seasons?.[seasonIndex];
+
+  if (!season) {
+    list.innerHTML = "";
+    return;
+  }
+
+  list.innerHTML = season.episodes.map((episode, index) => {
+    const disabled = !episode.mediaUrl ? "disabled" : "";
+    const label = episode.mediaUrl ? "Play episode" : "No link";
+
+    return `
+      <div class="series-episode">
+        <div class="series-episode-copy">
+          <span class="series-episode-title">${episode.title}</span>
+          <span class="series-episode-number">S${String(season.number).padStart(2, "0")}E${String(episode.number).padStart(2, "0")}</span>
+        </div>
+        <button
+          class="series-episode-play"
+          type="button"
+          data-play-episode="true"
+          data-season-index="${seasonIndex}"
+          data-episode-index="${index}"
+          ${disabled}
+        >
+          ${label}
+        </button>
+      </div>
+    `;
+  }).join("");
+}
+
+function showSeriesDetails(movie) {
+  if (!movie || !movie.seasons) return;
+
+  activeSeriesMovie = movie;
+
+  const title = document.getElementById("seriesTitle");
+  const meta = document.getElementById("seriesMeta");
+  const poster = document.getElementById("seriesPoster");
+  const select = document.getElementById("seriesSeasonSelect");
+  const modal = document.getElementById("seriesModal");
+
+  if (!title || !meta || !poster || !select || !modal) return;
+
+  title.textContent = movie.title;
+  meta.textContent = `${movie.year || ""} · ${movie.genre || ""} · ${movie.rating || ""}`;
+  poster.src = movie.poster || "";
+  poster.alt = `${movie.title} poster`;
+
+  select.innerHTML = movie.seasons.map((season, idx) => {
+    return `<option value="${idx}">${season.title || `Season ${season.number}`}</option>`;
+  }).join("");
+
+  modal.hidden = false;
+  renderSeriesEpisodes();
+}
+
+function closeSeriesDetails() {
+  const modal = document.getElementById("seriesModal");
+  if (!modal) return;
+
+  modal.hidden = true;
+  activeSeriesMovie = null;
+  document.body.style.overflow = "";
+}
+let activeEpisodeContext = null;
+
+function findAdjacentPlayableEpisode(direction) {
+  if (!activeEpisodeContext) return null;
+
+  const playableEpisodes = [];
+
+  activeEpisodeContext.show.seasons.forEach((season, seasonIndex) => {
+    season.episodes.forEach((episode, episodeIndex) => {
+      if (episode.mediaUrl) {
+        playableEpisodes.push({ seasonIndex, episodeIndex });
+      }
+    });
+  });
+
+  const currentIndex = playableEpisodes.findIndex(item =>
+    item.seasonIndex === activeEpisodeContext.seasonIndex &&
+    item.episodeIndex === activeEpisodeContext.episodeIndex
+  );
+
+  return currentIndex < 0 ? null : playableEpisodes[currentIndex + direction] || null;
+}
+
+function updateEpisodeButtons() {
+  const previousButton = document.getElementById("previousEpisodeBtn");
+  const nextButton = document.getElementById("nextEpisodeBtn");
+  if (!previousButton || !nextButton) return;
+
+  previousButton.hidden = !activeEpisodeContext;
+  nextButton.hidden = !activeEpisodeContext;
+
+  if (activeEpisodeContext) {
+    previousButton.disabled = !findAdjacentPlayableEpisode(-1);
+    nextButton.disabled = !findAdjacentPlayableEpisode(1);
+  }
+}
+
+function playSeriesEpisode(show, seasonIndex, episodeIndex) {
+  const season = show.seasons?.[seasonIndex];
+  const episode = season?.episodes?.[episodeIndex];
+  if (!season || !episode?.mediaUrl) return;
+
+  const context = { show, seasonIndex, episodeIndex };
+
+  closeSeriesDetails();
+  openMovie({
+    ...show,
+    id: `${show.id}-s${season.number}-e${episode.number}`,
+    title:
+      `${show.title} — S${String(season.number).padStart(2, "0")}` +
+      `E${String(episode.number).padStart(2, "0")}: ${episode.title}`,
+    type: "Movie",
+    mediaUrl: episode.mediaUrl,
+    episodeContext: context
+  });
+}
+
+document.getElementById("closeSeriesBtn")
+  ?.addEventListener("click", closeSeriesDetails);
+
+
+
     function renderMovies() {
       if (!activeProfile) return;
 
@@ -2283,6 +2735,15 @@
     function openMovie(movie) {
       if (!movie) return;
 
+      if (movie.type === "TV") {
+        showSeriesDetails(movie);
+        return;
+      }
+
+      activeEpisodeContext = movie.episodeContext || null;
+      updateEpisodeButtons();
+      if (!movie) return;
+
       if (isComingSoon(movie)) {
         document.getElementById("comingSoonSection").scrollIntoView({
           behavior: "smooth",
@@ -2335,6 +2796,8 @@
       modal.classList.remove("open");
       document.body.style.overflow = "";
       resetPlayer();
+      activeEpisodeContext = null;
+      updateEpisodeButtons();
 
       if (activeProfile && profileGate.hidden && detailsModal.hidden) {
         startCarousel();
@@ -2489,6 +2952,10 @@
     }
 
     function showMovieDetails(movie) {
+      if (movie.type === "TV") {
+      showSeriesDetails(movie);
+      return;
+    }
       if (!movie) return;
       currentDetailsMovieId = movie.id;
 
@@ -2607,6 +3074,23 @@
 
     document.getElementById("switchProfile").addEventListener("click", showProfilePicker);
     document.getElementById("myListToggle").addEventListener("click", toggleMyList);
+    document.getElementById("tvShowsNav").addEventListener("click", () => {
+      showMyList = false;
+      activeGenre = "All";
+      search.value = "";
+      closeSearchSuggestions();
+      yearFilter.value = "all";
+      sortFilter.value = "default";
+      typeFilter.value = "TV";
+      advancedGenreFilter.value = "All";
+
+      document.getElementById("myListToggle").setAttribute("aria-pressed", "false");
+      document.getElementById("collectionTitle").textContent = "Browse TV shows";
+
+      renderFilters();
+      renderMovies();
+      document.getElementById("movies").scrollIntoView({ behavior: "smooth" });
+    });
 
     document.querySelectorAll('.nav-links a[href="#home"], .nav-links a[href="#movies"]')
       .forEach(link => link.addEventListener("click", showAllMovies));
@@ -2792,6 +3276,27 @@
 
     document.getElementById("detailsClose").addEventListener("click", closeMovieDetails);
     document.getElementById("closeBtn").addEventListener("click", closePlayer);
+    document.getElementById("previousEpisodeBtn").addEventListener("click", () => {
+  const adjacent = findAdjacentPlayableEpisode(-1);
+  if (adjacent && activeEpisodeContext) {
+    playSeriesEpisode(
+      activeEpisodeContext.show,
+      adjacent.seasonIndex,
+      adjacent.episodeIndex
+    );
+  }
+});
+
+document.getElementById("nextEpisodeBtn").addEventListener("click", () => {
+  const adjacent = findAdjacentPlayableEpisode(1);
+  if (adjacent && activeEpisodeContext) {
+    playSeriesEpisode(
+      activeEpisodeContext.show,
+      adjacent.seasonIndex,
+      adjacent.episodeIndex
+    );
+  }
+});
 
     document.getElementById("fullscreenBtn").addEventListener("click", async () => {
       try {
@@ -2851,6 +3356,24 @@
     renderProfiles();
     renderAvatarChoices();
     renderComingSoon();
+    document.getElementById("seriesSeasonSelect")?.addEventListener("change", renderSeriesEpisodes);
+
+document.getElementById("closeSeriesBtn")?.addEventListener("click", closeSeriesDetails);
+
+document.getElementById("seriesEpisodeList")?.addEventListener("click", event => {
+  const button = event.target.closest("[data-play-episode]");
+  if (!button || !activeSeriesMovie) return;
+
+  playSeriesEpisode(
+    activeSeriesMovie,
+    Number(button.dataset.seasonIndex),
+    Number(button.dataset.episodeIndex)
+  );
+});
+
+document.getElementById("seriesModal")?.addEventListener("click", (event) => {
+  if (event.target.id === "seriesModal") closeSeriesDetails();
+});
   </script>
 </body>
 </html>
